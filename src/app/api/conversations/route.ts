@@ -127,20 +127,24 @@ export async function GET(request: NextRequest) {
             })
 
             // Determine the "other person"
-            let otherUser
+            let otherUser: any
             if (userRole === 'HR') {
+                // TypeScript narrowing: HR matches include jobseeker
+                const hrMatch: any = match
                 otherUser = {
-                    id: match.jobseeker.user.id,
-                    name: match.jobseeker.user.name,
-                    image: match.jobseeker.user.image,
-                    title: 'Candidate' // Could be their actual title if we had it
+                    id: hrMatch.jobseeker.user.id,
+                    name: hrMatch.jobseeker.user.name,
+                    image: hrMatch.jobseeker.user.image,
+                    title: 'Candidate'
                 }
             } else {
+                // Jobseeker matches include job.company.user
+                const jsMatch: any = match
                 otherUser = {
-                    id: match.job.company.user.id,
-                    name: match.job.company.name,
-                    image: match.job.company.logo,
-                    title: match.job.company.name
+                    id: jsMatch.job.company.user.id,
+                    name: jsMatch.job.company.name,
+                    image: jsMatch.job.company.logo,
+                    title: jsMatch.job.company.name
                 }
             }
 

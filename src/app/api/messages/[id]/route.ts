@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -13,9 +13,11 @@ export async function GET(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        const { id } = await params
+
         // Verify participant
         const match = await prisma.match.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: {
                 job: {
                     include: {
@@ -42,7 +44,7 @@ export async function GET(
         // Fetch messages
         const messages = await prisma.message.findMany({
             where: {
-                matchId: params.id
+                matchId: id
             },
             orderBy: {
                 createdAt: 'asc'
@@ -67,7 +69,7 @@ export async function GET(
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -83,9 +85,11 @@ export async function POST(
             return NextResponse.json({ error: 'Content is required' }, { status: 400 })
         }
 
+        const { id } = await params
+
         // Verify participant and get recipient
         const match = await prisma.match.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: {
                 job: {
                     include: {
@@ -121,7 +125,7 @@ export async function POST(
                 metadata: metadata ? JSON.stringify(metadata) : null,
                 senderId: session.user.id,
                 recipientId,
-                matchId: params.id,
+                matchId: id,
                 jobId: match.jobId,
                 read: false
             },

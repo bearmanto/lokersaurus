@@ -182,7 +182,7 @@ export default function ChatWindow({ matchId, otherUser }: ChatWindowProps) {
                             className="mb-4"
                         />
                         <div className="modal-actions">
-                            <Button variant="ghost" onClick={() => setShowScheduleModal(false)}>Cancel</Button>
+                            <Button variant="outline" onClick={() => setShowScheduleModal(false)}>Cancel</Button>
                             <Button onClick={handleScheduleSubmit} disabled={!bookingUrl}>Send Invitation</Button>
                         </div>
                     </div>

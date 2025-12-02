@@ -5,7 +5,7 @@ import Button from '@/components/ui/Button'
 
 export default function LogoutButton() {
     return (
-        <Button variant="ghost" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
+        <Button variant="outline" size="sm" onClick={() => signOut({ callbackUrl: '/' })}>
             Logout
         </Button>
     )

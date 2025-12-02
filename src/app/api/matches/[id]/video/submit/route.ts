@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -20,9 +20,11 @@ export async function POST(
             return NextResponse.json({ error: 'Video URL is required' }, { status: 400 })
         }
 
+        const { id } = await params
+
         // Verify match ownership
         const match = await prisma.match.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: {
                 jobseeker: true
             }
@@ -38,7 +40,7 @@ export async function POST(
 
         // Update match
         const updatedMatch = await prisma.match.update({
-            where: { id: params.id },
+            where: { id },
             data: {
                 videoSubmitted: true,
                 videoUrl: videoUrl

@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -21,10 +21,12 @@ export async function POST(
             return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
         }
 
+        const { id } = await params
+
         // Update match status
         const match = await prisma.match.update({
             where: {
-                id: params.id,
+                id,
                 jobseekerId: profile.id,
             },
             data: {

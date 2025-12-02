@@ -1,11 +1,10 @@
-```typescript
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await auth()
@@ -14,9 +13,11 @@ export async function POST(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        const { id } = await params
+
         // Verify match ownership
         const match = await prisma.match.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: {
                 job: {
                     include: {
@@ -36,7 +37,7 @@ export async function POST(
 
         // Update match
         const updatedMatch = await prisma.match.update({
-            where: { id: params.id },
+            where: { id },
             data: {
                 videoRequested: true,
                 // Also ensure status is at least CONTACTED if they are requesting video
