@@ -1,0 +1,146 @@
+.match-detail-page {
+    min-height: calc(100vh - var(--navbar-height));
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-bg-secondary);
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: var(--spacing-xl);
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.back-link:hover {
+    color: var(--color-primary);
+}
+
+.match-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: var(--spacing-2xl);
+}
+
+@media (max-width: 968px) {
+    .match-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.job-header {
+    padding: var(--spacing-2xl) !important;
+    position: relative;
+}
+
+.match-score-large {
+    position: absolute;
+    top: var(--spacing-xl);
+    right: var(--spacing-xl);
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+}
+
+.job-header h1 {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--spacing-sm);
+    padding-right: 120px;
+}
+
+.company-name {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.salary-range {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-top: var(--spacing-md);
+}
+
+.job-description,
+.job-skills {
+    padding: var(--spacing-2xl) !important;
+}
+
+.job-description h2,
+.job-skills h2 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-lg);
+}
+
+.description-text {
+    white-space: pre-wrap;
+    line-height: var(--line-height-relaxed);
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.skill-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.action-card,
+.company-card {
+    padding: var(--spacing-xl) !important;
+}
+
+.action-card h3,
+.company-card h3 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-sm);
+}
+
+.action-card p,
+.company-card p {
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text-secondary);
+}
+
+.company-link {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.company-link:hover {
+    text-decoration: underline;
+}

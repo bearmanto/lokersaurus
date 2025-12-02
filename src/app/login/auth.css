@@ -1,0 +1,119 @@
+/* Authentication Pages - Split Layout */
+.auth-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: var(--color-surface);
+}
+
+.auth-visual {
+    background-color: var(--color-bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-3xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-visual::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(164, 119, 100, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(212, 165, 116, 0.08) 0%, transparent 50%);
+}
+
+.auth-quote {
+    max-width: 400px;
+    position: relative;
+    z-index: 1;
+}
+
+.quote-text {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-snug);
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text-primary);
+}
+
+.quote-author {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+}
+
+.auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-3xl);
+}
+
+.auth-content {
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-header {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.auth-header h1 {
+    font-size: var(--font-size-h2);
+    margin-bottom: var(--spacing-sm);
+}
+
+.auth-header p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.auth-footer {
+    margin-top: var(--spacing-2xl);
+    text-align: center;
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+}
+
+.auth-footer a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.auth-error {
+    background-color: rgba(193, 123, 92, 0.1);
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-small);
+}
+
+@media (max-width: 968px) {
+    .auth-page {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-visual {
+        display: none;
+    }
+
+    .auth-container {
+        padding: var(--spacing-xl);
+    }
+}

@@ -1,0 +1,101 @@
+.conversation-list {
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.conversation-list h3 {
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin: 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+    font-size: var(--font-size-lg);
+    background-color: var(--color-bg-secondary);
+}
+
+.conv-items {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.conv-item {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-bottom: var(--border-width) solid var(--color-border-light);
+    transition: background-color var(--transition-fast);
+    text-decoration: none;
+    color: inherit;
+}
+
+.conv-item:hover {
+    background-color: var(--color-bg-secondary);
+}
+
+.conv-item.active {
+    background-color: var(--color-primary-light);
+    border-left: 3px solid var(--color-primary);
+}
+
+.conv-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.conv-info {
+    flex: 1;
+    min-width: 0;
+    /* Enables text truncation */
+}
+
+.conv-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+
+.conv-name {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+}
+
+.conv-time {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+.conv-job {
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conv-preview {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+.conv-loading,
+.conv-empty {
+    padding: var(--spacing-lg);
+    text-align: center;
+    color: var(--color-text-secondary);
+}

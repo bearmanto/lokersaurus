@@ -1,0 +1,19 @@
+.jobs-page {
+    min-height: calc(100vh - var(--navbar-height));
+    padding: var(--spacing-2xl) 0;
+}
+
+.jobs-header {
+    margin-bottom: var(--spacing-2xl);
+    text-align: center;
+}
+
+.jobs-placeholder {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 2px dashed var(--color-border);
+    max-width: 800px;
+    margin: 0 auto;
+}

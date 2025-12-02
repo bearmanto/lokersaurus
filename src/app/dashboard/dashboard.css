@@ -1,0 +1,101 @@
+.dashboard-page {
+    min-height: calc(100vh - var(--navbar-height));
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-bg-secondary);
+}
+
+.dashboard-header {
+    margin-bottom: var(--spacing-3xl);
+    padding: var(--spacing-2xl);
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-header h1 {
+    font-size: var(--font-size-h2);
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: var(--letter-spacing-tight);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.dashboard-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.dashboard-card {
+    padding: var(--spacing-2xl) !important;
+    text-align: center;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    background-color: var(--color-surface);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-base);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary);
+}
+
+.dashboard-card:hover::before {
+    transform: scaleX(1);
+}
+
+.dashboard-card-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.dashboard-card:hover .dashboard-card-icon {
+    color: var(--color-primary);
+}
+
+.dashboard-card h3 {
+    font-size: var(--font-size-h3);
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+.dashboard-card p {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: var(--line-height-relaxed);
+    max-width: 80%;
+}

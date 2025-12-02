@@ -1,0 +1,104 @@
+.candidates-page {
+    min-height: calc(100vh - var(--navbar-height));
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-bg-secondary);
+}
+
+.page-header {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.page-header h1 {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--spacing-sm);
+}
+
+.page-header p {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+}
+
+.results-count {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-3xl) !important;
+}
+
+.empty-state h3 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-md);
+}
+
+.empty-state p {
+    color: var(--color-text-secondary);
+}
+
+.candidates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.candidate-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.candidate-card {
+    padding: var(--spacing-xl) !important;
+}
+
+.candidate-card h3 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-xs);
+}
+
+.location {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.bio {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--spacing-md);
+}
+
+.skills-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.skill-tag {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+}
+
+.more-skills {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+    padding: 0.25rem 0.625rem;
+}
+
+.candidate-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}

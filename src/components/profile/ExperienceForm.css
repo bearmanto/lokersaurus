@@ -1,0 +1,51 @@
+.experience-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.experience-item {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.experience-header {
+    padding: var(--spacing-md);
+    background-color: var(--color-bg-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.experience-header:hover {
+    background-color: var(--color-bg-tertiary);
+}
+
+.experience-org {
+    color: var(--color-text-secondary);
+    font-weight: normal;
+}
+
+.experience-body {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    cursor: pointer;
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.remove-btn:hover {
+    text-decoration: underline;
+}

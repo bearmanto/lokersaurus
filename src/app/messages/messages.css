@@ -1,0 +1,46 @@
+.messages-page {
+    min-height: calc(100vh - var(--navbar-height));
+    padding: var(--spacing-xl) 0;
+    background-color: var(--color-bg-secondary);
+}
+
+.messages-page h1 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.messages-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: var(--spacing-lg);
+    height: 600px;
+}
+
+@media (max-width: 768px) {
+    .messages-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .messages-sidebar {
+        display: none;
+        /* Hide sidebar on mobile when viewing chat, logic needed */
+    }
+}
+
+.messages-main.empty {
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.select-chat-placeholder h3 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-sm);
+}
+
+.select-chat-placeholder p {
+    color: var(--color-text-secondary);
+}

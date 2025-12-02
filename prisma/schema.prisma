@@ -1,0 +1,193 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User roles: JOBSEEKER | HR | ADMIN
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String?
+  role          String    @default("JOBSEEKER") // JOBSEEKER | HR | ADMIN
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  banned        Boolean   @default(false)
+
+  // Relations
+  jobseekerProfile JobseekerProfile?
+  company          Company?
+  sentMessages     Message[]         @relation("SentMessages")
+  receivedMessages Message[]         @relation("ReceivedMessages")
+}
+
+// Enhanced Jobseeker Profile with comprehensive fields
+model JobseekerProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Basic Info
+  bio         String?
+  location    String?
+  phone       String?
+  
+  // Skills & Experience (stored as JSON strings)
+  skills      String?  // JSON array: ["JavaScript", "React", "Node.js"]
+  experience  String?  // JSON array of work history objects
+  education   String?  // JSON array of education objects
+  
+  // Files
+  resumeUrl   String?
+  portfolioUrl String?
+  videoUrl    String?  // 10-15 sec video selfie
+  
+  // Work Preferences
+  jobType     String?  // FULL_TIME | PART_TIME | CONTRACT | FREELANCE
+  remote      String?  // REMOTE | ONSITE | HYBRID
+  minSalary   Int?
+  maxSalary   Int?
+  currency    String?  @default("USD")
+  availability String? // IMMEDIATE | 2_WEEKS | 1_MONTH | 3_MONTHS
+  
+  // Visibility & Status
+  isActive    Boolean  @default(true)  // Available for matching
+  profileComplete Boolean @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  matches     Match[]
+}
+
+model Company {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  industry    String?
+  size        String?  // 1-10 | 11-50 | 51-200 | 201-500 | 500+
+  website     String?
+  logo        String?
+  location    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  jobs        Job[]
+}
+
+// Enhanced Job model with matching fields
+model Job {
+  id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  title       String
+  description String
+  location    String?
+  
+  // Requirements for matching
+  requiredSkills String?  // JSON array of required skills
+  experienceLevel String? // ENTRY | MID | SENIOR | LEAD
+  jobType     String      // FULL_TIME | PART_TIME | CONTRACT | FREELANCE
+  remote      String      // REMOTE | ONSITE | HYBRID
+  
+  // Compensation
+  minSalary   Int?
+  maxSalary   Int?
+  currency    String?  @default("USD")
+  
+  // Job Status
+  status      String   @default("DRAFT")  // DRAFT | ACTIVE | CLOSED
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  matches     Match[]
+  applications Application[]
+}
+
+// Match model - links jobs to jobseekers via auto-matching or HR search
+model Match {
+  id              String   @id @default(cuid())
+  jobId           String
+  job             Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobseekerId     String
+  jobseeker       JobseekerProfile @relation(fields: [jobseekerId], references: [id], onDelete: Cascade)
+  
+  // Matching Details
+  score           Int      // Matching score 0-100
+  initiatedBy     String   // SYSTEM (auto-match) | HR (manual search)
+  
+  // Status Tracking
+  status          String   @default("PENDING")  // PENDING | INTERESTED | CONTACTED | PROGRESSED | REJECTED
+  
+  // Engagement
+  viewedByHR      Boolean  @default(false)
+  viewedByJobseeker Boolean @default(false)
+  interestedAt    DateTime? // When jobseeker clicked "I'm Interested"
+  contactedAt     DateTime? // When HR initiated contact
+  
+  // Video Request
+  videoRequested  Boolean  @default(false)
+  videoSubmitted  Boolean  @default(false)
+  videoUrl        String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([jobId, jobseekerId])
+  @@index([jobId])
+  @@index([jobseekerId])
+}
+
+// Application - created when HR decides to progress a match
+model Application {
+  id          String   @id @default(cuid())
+  jobId       String
+  job         Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobseekerId String
+  
+  status      String   @default("PENDING")  // PENDING | REVIEWING | INTERVIEW | OFFER | ACCEPTED | REJECTED
+  coverLetter String?
+  notes       String?  // HR notes
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([jobId])
+  @@index([jobseekerId])
+}
+
+// In-app messaging between HR and Jobseekers
+model Message {
+  id          String   @id @default(cuid())
+  senderId    String
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User     @relation("ReceivedMessages", fields: [recipientId], references: [id], onDelete: Cascade)
+  
+  content     String
+  read        Boolean  @default(false)
+  
+  // Context
+  jobId       String?  // Optional: related to which job
+  matchId     String?  // Optional: related to which match
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([jobId])
+}

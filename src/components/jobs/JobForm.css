@@ -1,0 +1,59 @@
+.job-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+}
+
+.form-section {
+    padding: var(--spacing-2xl) !important;
+}
+
+.form-section h2 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.form-group label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.form-group select,
+.form-group textarea {
+    font-family: var(--font-family);
+}
+
+.form-error {
+    padding: var(--spacing-md);
+    background-color: rgba(229, 72, 77, 0.1);
+    border: var(--border-width) solid var(--color-error);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
