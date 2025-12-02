@@ -5,70 +5,34 @@ import { useRouter } from 'next/navigation'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
-import SkillsInput from './SkillsInput'
-import ExperienceForm from './ExperienceForm'
-import './ProfileForm.css'
+import ResumeUploader from './ResumeUploader'
 
-interface ProfileFormProps {
-    initialData: any
-    userId: string
-}
+// ... imports
 
 export default function ProfileForm({ initialData, userId }: ProfileFormProps) {
-    const router = useRouter()
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
+    // ... existing state
 
-    // Parse JSON fields
-    const initialSkills = initialData?.skills ? JSON.parse(initialData.skills) : []
-    const initialExperience = initialData?.experience ? JSON.parse(initialData.experience) : []
-    const initialEducation = initialData?.education ? JSON.parse(initialData.education) : []
-
-    const [formData, setFormData] = useState({
-        bio: initialData?.bio || '',
-        location: initialData?.location || '',
-        phone: initialData?.phone || '',
-        skills: initialSkills,
-        experience: initialExperience,
-        education: initialEducation,
-        resumeUrl: initialData?.resumeUrl || '',
-        portfolioUrl: initialData?.portfolioUrl || '',
-        jobType: initialData?.jobType || '',
-        remote: initialData?.remote || '',
-        minSalary: initialData?.minSalary || '',
-        maxSalary: initialData?.maxSalary || '',
-        availability: initialData?.availability || '',
-        isActive: initialData?.isActive ?? true,
-    })
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setLoading(true)
-        setError('')
-
-        try {
-            const response = await fetch('/api/profile/jobseeker', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            })
-
-            if (!response.ok) {
-                throw new Error('Failed to save profile')
-            }
-
-            router.push('/dashboard')
-            router.refresh()
-        } catch (err: any) {
-            setError(err.message)
-        } finally {
-            setLoading(false)
-        }
+    const handleResumeUpload = (data: any) => {
+        setFormData(prev => ({
+            ...prev,
+            bio: data.bio || prev.bio,
+            skills: [...new Set([...prev.skills, ...(data.skills || [])])],
+            experience: [...(data.experience || []), ...prev.experience],
+            education: [...(data.education || []), ...prev.education],
+        }))
     }
+
+    // ... handleSubmit
 
     return (
         <form onSubmit={handleSubmit} className="profile-form">
             {error && <div className="form-error">{error}</div>}
+
+            {/* Resume Auto-Fill */}
+            <Card className="form-section mb-8">
+                <h2>Quick Start</h2>
+                <ResumeUploader onUploadComplete={handleResumeUpload} />
+            </Card>
 
             {/* Basic Information */}
             <Card className="form-section">

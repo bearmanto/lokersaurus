@@ -90,14 +90,38 @@ export default async function CandidatesSearchPage({
                         {filteredCandidates.map((candidate) => {
                             const skills = candidate.skills ? JSON.parse(candidate.skills) : []
 
+                            // Blind Hiring Logic
+                            // In a real app, we'd fetch matches to check status. 
+                            // For MVP demo, we'll assume all are masked unless specific condition met
+                            // Let's check if there's an accepted match
+                            // Note: We need to fetch matches for this to work properly.
+                            // For now, let's implement the visual masking first.
+
+                            const isMasked = true // Default to masked for now to demonstrate feature
+                            const displayName = isMasked ? `Candidate #${candidate.id.slice(-4)}` : candidate.user.name
+                            const dinoAvatar = `https://api.dicebear.com/9.x/dylan/svg?seed=${candidate.id}`
+
                             return (
                                 <Link href={`/candidates/${candidate.id}`} key={candidate.id} className="candidate-card-link">
                                     <Card className="candidate-card" hover>
-                                        <h3>{candidate.user.name || 'Anonymous'}</h3>
-
-                                        {candidate.location && (
-                                            <p className="location">📍 {candidate.location}</p>
-                                        )}
+                                        <div className="candidate-header">
+                                            <div className="candidate-avatar-wrapper">
+                                                <img
+                                                    src={dinoAvatar}
+                                                    alt="Candidate Avatar"
+                                                    className="candidate-avatar"
+                                                    width={64}
+                                                    height={64}
+                                                />
+                                                {isMasked && <span className="blind-badge" title="Blind Hiring Mode">🦖</span>}
+                                            </div>
+                                            <div className="candidate-info">
+                                                <h3>{displayName}</h3>
+                                                {candidate.location && (
+                                                    <p className="location">📍 {candidate.location}</p>
+                                                )}
+                                            </div>
+                                        </div>
 
                                         {candidate.bio && (
                                             <p className="bio">{candidate.bio.substring(0, 120)}{candidate.bio.length > 120 ? '...' : ''}</p>

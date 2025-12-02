@@ -50,10 +50,23 @@ export default function RegisterPage() {
 
     return (
         <div className="auth-page">
+            {/* Visual Side */}
+            <div className="auth-visual">
+                <div className="auth-quote">
+                    <p className="quote-text">
+                        "I built my entire team using Lokersaurus. The reverse job board model saves us weeks of sourcing time."
+                    </p>
+                    <p className="quote-author">
+                        — Michael Chen, Founder at StartUp Inc.
+                    </p>
+                </div>
+            </div>
+
+            {/* Form Side */}
             <div className="auth-container">
-                <Card className="auth-card">
+                <div className="auth-content">
                     <div className="auth-header">
-                        <h1>Create your account</h1>
+                        <h1>Create account</h1>
                         <p>Join Lokersaurus and start your journey</p>
                     </div>
 
@@ -64,36 +77,6 @@ export default function RegisterPage() {
                     )}
 
                     <form onSubmit={handleSubmit} className="auth-form">
-                        <Input
-                            type="text"
-                            label="Full Name"
-                            placeholder="John Doe"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            required
-                            fullWidth
-                        />
-
-                        <Input
-                            type="email"
-                            label="Email"
-                            placeholder="you@example.com"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            required
-                            fullWidth
-                        />
-
-                        <Input
-                            type="password"
-                            label="Password"
-                            placeholder="••••••••"
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            required
-                            fullWidth
-                        />
-
                         <div className="role-selector">
                             <label className="role-label">I am a:</label>
                             <div className="role-options">
@@ -127,6 +110,36 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
+                        <Input
+                            type="text"
+                            label="Full Name"
+                            placeholder="John Doe"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            required
+                            fullWidth
+                        />
+
+                        <Input
+                            type="email"
+                            label="Email"
+                            placeholder="you@example.com"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            required
+                            fullWidth
+                        />
+
+                        <Input
+                            type="password"
+                            label="Password"
+                            placeholder="••••••••"
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            required
+                            fullWidth
+                        />
+
                         {formData.role === 'HR' && (
                             <Input
                                 type="text"
@@ -139,7 +152,7 @@ export default function RegisterPage() {
                             />
                         )}
 
-                        <Button type="submit" fullWidth loading={loading}>
+                        <Button type="submit" full loading={loading}>
                             Create Account
                         </Button>
                     </form>
@@ -150,7 +163,7 @@ export default function RegisterPage() {
                             <Link href="/login">Sign in</Link>
                         </p>
                     </div>
-                </Card>
+                </div>
             </div>
         </div>
     )

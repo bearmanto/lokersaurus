@@ -59,20 +59,31 @@ export default function ChatWindow({ matchId, otherUser }: ChatWindowProps) {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [messages])
 
-    const handleSend = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!newMessage.trim()) return
+    const [showScheduleModal, setShowScheduleModal] = useState(false)
+    const [bookingUrl, setBookingUrl] = useState('')
+
+    const handleSend = async (e?: React.FormEvent, type: string = 'TEXT', metadata: any = null, contentOverride?: string) => {
+        if (e) e.preventDefault()
+
+        const contentToSend = contentOverride || newMessage
+        if (!contentToSend.trim()) return
 
         setSending(true)
         try {
             const res = await fetch(`/api/messages/${matchId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: newMessage }),
+                body: JSON.stringify({
+                    content: contentToSend,
+                    type,
+                    metadata
+                }),
             })
 
             if (res.ok) {
                 setNewMessage('')
+                setShowScheduleModal(false)
+                setBookingUrl('')
                 fetchMessages() // Refresh immediately
             }
         } catch (error) {
@@ -82,6 +93,11 @@ export default function ChatWindow({ matchId, otherUser }: ChatWindowProps) {
         }
     }
 
+    const handleScheduleSubmit = () => {
+        if (!bookingUrl) return
+        handleSend(undefined, 'SCHEDULING', { url: bookingUrl }, '📅 Interview Invitation')
+    }
+
     if (loading) {
         return <div className="chat-loading">Loading conversation...</div>
     }
@@ -89,8 +105,19 @@ export default function ChatWindow({ matchId, otherUser }: ChatWindowProps) {
     return (
         <div className="chat-window">
             <div className="chat-header">
-                <h3>{otherUser.name}</h3>
-                {otherUser.title && <span className="chat-subtitle">{otherUser.title}</span>}
+                <div>
+                    <h3>{otherUser.name}</h3>
+                    {otherUser.title && <span className="chat-subtitle">{otherUser.title}</span>}
+                </div>
+                {session?.user?.role === 'HR' && (
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setShowScheduleModal(true)}
+                    >
+                        📅 Schedule Interview
+                    </Button>
+                )}
             </div>
 
             <div className="messages-list">
@@ -99,12 +126,24 @@ export default function ChatWindow({ matchId, otherUser }: ChatWindowProps) {
                         <p>No messages yet. Start the conversation!</p>
                     </div>
                 ) : (
-                    messages.map((msg) => {
+                    messages.map((msg: any) => {
                         const isMe = msg.senderId === session?.user?.id
+                        const metadata = msg.metadata ? JSON.parse(msg.metadata) : null
+
                         return (
-                            <div key={msg.id} className={`message-bubble ${isMe ? 'me' : 'them'}`}>
+                            <div key={msg.id} className={`message-bubble ${isMe ? 'me' : 'them'} ${msg.type === 'SCHEDULING' ? 'scheduling' : ''}`}>
                                 <div className="message-content">
-                                    <p>{msg.content}</p>
+                                    {msg.type === 'SCHEDULING' ? (
+                                        <div className="scheduling-card">
+                                            <h4>📅 Interview Invitation</h4>
+                                            <p>You are invited to schedule an interview.</p>
+                                            <a href={metadata?.url} target="_blank" rel="noopener noreferrer" className="book-button">
+                                                Book a Time
+                                            </a>
+                                        </div>
+                                    ) : (
+                                        <p>{msg.content}</p>
+                                    )}
                                 </div>
                                 <span className="message-time">
                                     {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -116,7 +155,7 @@ export default function ChatWindow({ matchId, otherUser }: ChatWindowProps) {
                 <div ref={messagesEndRef} />
             </div>
 
-            <form onSubmit={handleSend} className="chat-input-area">
+            <form onSubmit={(e) => handleSend(e)} className="chat-input-area">
                 <Input
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
@@ -128,6 +167,27 @@ export default function ChatWindow({ matchId, otherUser }: ChatWindowProps) {
                     Send
                 </Button>
             </form>
+
+            {/* Schedule Modal */}
+            {showScheduleModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3>Schedule Interview</h3>
+                        <p>Paste your Calendly or Booking URL below:</p>
+                        <Input
+                            value={bookingUrl}
+                            onChange={(e) => setBookingUrl(e.target.value)}
+                            placeholder="https://calendly.com/..."
+                            fullWidth
+                            className="mb-4"
+                        />
+                        <div className="modal-actions">
+                            <Button variant="ghost" onClick={() => setShowScheduleModal(false)}>Cancel</Button>
+                            <Button onClick={handleScheduleSubmit} disabled={!bookingUrl}>Send Invitation</Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

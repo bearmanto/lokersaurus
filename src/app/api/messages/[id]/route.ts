@@ -77,7 +77,7 @@ export async function POST(
         }
 
         const body = await request.json()
-        const { content } = body
+        const { content, type = 'TEXT', metadata } = body
 
         if (!content || typeof content !== 'string') {
             return NextResponse.json({ error: 'Content is required' }, { status: 400 })
@@ -117,6 +117,8 @@ export async function POST(
         const message = await prisma.message.create({
             data: {
                 content,
+                type,
+                metadata: metadata ? JSON.stringify(metadata) : null,
                 senderId: session.user.id,
                 recipientId,
                 matchId: params.id,

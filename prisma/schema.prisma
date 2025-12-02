@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -28,6 +28,7 @@ model User {
   company          Company?
   sentMessages     Message[]         @relation("SentMessages")
   receivedMessages Message[]         @relation("ReceivedMessages")
+  assessments      UserAssessment[]
 }
 
 // Enhanced Jobseeker Profile with comprehensive fields
@@ -107,6 +108,7 @@ model Job {
   minSalary   Int?
   maxSalary   Int?
   currency    String?  @default("USD")
+  isSalaryPublic Boolean @default(false)
   
   // Job Status
   status      String   @default("DRAFT")  // DRAFT | ACTIVE | CLOSED
@@ -181,6 +183,9 @@ model Message {
   content     String
   read        Boolean  @default(false)
   
+  type        String   @default("TEXT") // TEXT | SCHEDULING | VIDEO_REQUEST
+  metadata    String?  // JSON string for extra data
+  
   // Context
   jobId       String?  // Optional: related to which job
   matchId     String?  // Optional: related to which match
@@ -190,4 +195,48 @@ model Message {
   @@index([senderId])
   @@index([recipientId])
   @@index([jobId])
+}
+
+// Assessment System
+model Assessment {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  icon        String?  // e.g. "react", "node"
+  passingScore Int     @default(80) // Percentage
+
+  questions   Question[]
+  userResults UserAssessment[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Question {
+  id            String     @id @default(cuid())
+  assessmentId  String
+  assessment    Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  
+  text          String
+  options       String     // JSON array of strings ["Option A", "Option B"]
+  correctOption Int        // Index of correct option (0-3)
+
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model UserAssessment {
+  id            String     @id @default(cuid())
+  userId        String
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assessmentId  String
+  assessment    Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+
+  score         Int        // Percentage
+  passed        Boolean    @default(false)
+  completedAt   DateTime   @default(now())
+
+  @@index([userId])
+  @@index([assessmentId])
 }
